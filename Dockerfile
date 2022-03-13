@@ -25,7 +25,7 @@ EXPOSE 8333
 RUN apk --update upgrade && \
     apk add libtool pkgconfig boost-dev libevent-dev db-dev && \
     rm -fr /var/cache/apk/* && \
-    mkdir -p /bitcoin && \
+    mkdir -p /bitcoin/bin && \
     mkdir /bitcoin/data
 COPY --from=builder /bitcoin/* /bitcoin/bin/
 COPY entrypoint.sh /bitcoin/bin/

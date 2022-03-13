@@ -22,4 +22,4 @@ doker run --rm -v /srv/bitcoind:/bitcoin/data bitcoincore-container:v1 makeconf
 docker run -n bitcoincore -v /srv/bitcoind/:bitcoin/data bitcoincore-container:v1
 
 To launch bitcoincore-container with options run:
-docker run -n bitcoincore -v /home/bitcoin/data:/bitcoin/data -E OPTS="-prune=100000"
+docker run -n bitcoincore -v /home/bitcoin/data:/bitcoin/data -E OPTS="--prune=100000"

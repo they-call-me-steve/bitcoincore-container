@@ -3,7 +3,7 @@ MAINTAINER steve@the-steve.com
 # Change VERSION any branch in the bitcoin git repo. Defaults to master. Versions older than 23.x may have trouble building or completing tests.
 ARG VERSION=master
 # Default is 4, but change this to whatever works for your system
-ARG BUILDCORES=10
+ARG BUILDCORES=4
 # Download all needed packages, clone git repo, compile, run tests to verify success, move binaries to directory for easy copy
 RUN apk --update upgrade && \
     apk add gcc git make autoconf libtool automake pkgconfig g++ boost-dev libevent-dev db-dev libzmq file && \

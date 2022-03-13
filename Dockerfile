@@ -12,17 +12,10 @@ RUN apk add -U autoconf automake bash bison boost-dev build-base curl db-dev git
     CONFIG_SITE=/bitcoin/depends/x86_64-pc-linux-musl/share/config.site ./configure --without-gui --without-miniupnpc --without-natpmp && \
     make -j "${BUILDCORES}"
 
-FROM alpine:3.13.5
-MAINTAINER steve@the-steve.com
+FROM scratch
+LABEL MAINTAINER "Stephen Hunter" <steve@the-steve.com>
 ENV HOME /bitcoin/data
 EXPOSE 8333
-RUN apk --update upgrade && \
-    apk add libtool pkgconfig boost-dev libevent-dev db-dev && \
-    rm -fr /var/cache/apk/* && \
-    mkdir -p /bitcoin && \
-    mkdir /bitcoin/data
-COPY --from=builder /bitcoin/* /bitcoin/bin/
-COPY entrypoint.sh /bitcoin/bin/
-ENTRYPOINT ["/bin/sh"]
-#ENTRYPOINT ["/bitcoin/bin/entrypoint.sh"]
-#CMD ["startd"]
+COPY --from=builder /bitcoin/src/bitcoind /bitcoin/src/bitcoin-cli /bitcoin/src/bitcoin-tx /bitcoin/src/bitcoin-util /bin/
+COPY --from=builder /lib/ld-musl-x86_64.so.1 /usr/lib/libstdc++.so.6 /usr/lib/libgcc_s.so.1 /lib/
+CMD ["/bin/bitcoind"]

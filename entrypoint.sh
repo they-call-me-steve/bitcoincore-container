@@ -1,5 +1,17 @@
 #!/bin/sh
-#startd starts the service and is the default if nothing else is passed
+COMMAND="${1}"
+if [ "${COMMAND}" == 'startd' ]; then
+	/bitcoin/bin/bitcoind -datadir=/bitcoin/data "${OPTS}"
+elif [ "${COMMAND}" == 'makeconf' ]; then
+	cp /bitcoin/bitcoin.conf /bitcoin/data
+	exit 0
 #cli runs bitcoin-cli
 #tx runs bitcoin-tx
 #util runs bitcoin-util
+#makeconf drops in config file
+elif [ "${COMMAND}" == 'shell' ]; then
+	/bin/sh
+else
+	echo "Unknown command ${COMMAND}" 1>&2
+	exit 1
+fi

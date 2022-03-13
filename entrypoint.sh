@@ -1,7 +1,7 @@
 #!/bin/sh
 COMMAND="${1}"
 if [ "${COMMAND}" == 'startd' ]; then
-	/bitcoin/bin/bitcoind -datadir=/bitcoin/data "${OPTS}"
+	/bitcoin/bin/bitcoind --datadir=/bitcoin/data "${OPTS}"
 elif [ "${COMMAND}" == 'makeconf' ]; then
 	cp /bitcoin/bitcoin.conf /bitcoin/data
 	exit 0

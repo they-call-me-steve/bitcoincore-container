@@ -5,10 +5,10 @@ if [ "${COMMAND}" == 'startd' ]; then
 elif [ "${COMMAND}" == 'makeconf' ]; then
 	cp /bitcoin/bitcoin.conf /bitcoin/data
 	exit 0
-#cli runs bitcoin-cli
-#tx runs bitcoin-tx
-#util runs bitcoin-util
-#makeconf drops in config file
+# cli runs bitcoin-cli
+# tx runs bitcoin-tx
+# util runs bitcoin-util
+# shell can be used for troubleshooting
 elif [ "${COMMAND}" == 'shell' ]; then
 	/bin/sh
 else

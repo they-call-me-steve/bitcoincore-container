@@ -18,6 +18,7 @@ Bitcoind can either be configured using the OPTS environment variable or by a co
 To drop the default config into the data directory run:
 
 doker run --rm -v /srv/bitcoind:/bitcoin/data bitcoincore-container:v1 makeconf
+
 docker run -n bitcoincore -v /srv/bitcoind/:bitcoin/data bitcoincore-container:v1
 
 To launch bitcoincore-container with options run:

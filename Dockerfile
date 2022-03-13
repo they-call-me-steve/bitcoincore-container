@@ -1,7 +1,7 @@
 FROM alpine:3.13.5 as builder
 MAINTAINER steve@the-steve.com
-# Change VERSION any branch in git repo. Defaults to version 23.x
-ARG VERSION=22.x
+# Change VERSION any branch in git repo. Defaults to version master. Versions older than 23.x have trouble building.
+ARG VERSION=master
 # Default is 4, but change this to whatever works for your system
 ARG BUILDCORES=4
 # Download all needed packages, clone git repo and compile
@@ -12,7 +12,7 @@ RUN apk --update upgrade && \
     cd /bitcoin-core-src && \
     git checkout ${VERSION} && \
     ./autogen.sh && \
-    ./configure --with-incompatible-bdb && \
+    ./configure && \
     make -j ${BUILDCORES} && \
     make check && \
     ./test/functional/test_runner.py --extended && \

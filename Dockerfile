@@ -20,8 +20,6 @@ RUN apk --update upgrade && \
 
 FROM alpine:3.13.5
 MAINTAINER steve@the-steve.com
-ENV HOME /bitcoin/data
-EXPOSE 8333
 RUN apk --update upgrade && \
     apk add libtool pkgconfig boost-dev libevent-dev db-dev && \
     rm -fr /var/cache/apk/* && \

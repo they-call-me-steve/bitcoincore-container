@@ -11,8 +11,8 @@ RUN apk --update upgrade && \
     git clone https://github.com/bitcoin/bitcoin /bitcoin-core-src && \
     cd /bitcoin-core-src && \
     git checkout ${VERSION} && \
-    ./autogen.sh --with-incompatible-bdb && \
-    ./configure && \
+    ./autogen.sh && \
+    ./configure --with-incompatible-bdb && \
     make -j ${BUILDCORES} && \
     make check && \
     ./test/functional/test_runner.py --extended && \

@@ -1,6 +1,6 @@
 FROM alpine:3.13.5 as builder
 MAINTAINER steve@the-steve.com
-# Change VERSION any branch in git repo. Defaults to version master. Versions older than 23.x have trouble building.
+# Change VERSION any branch in the bitcoin git repo. Defaults to master. Versions older than 23.x may have trouble building or completing tests.
 ARG VERSION=master
 # Default is 4, but change this to whatever works for your system
 ARG BUILDCORES=4
@@ -21,12 +21,17 @@ RUN apk --update upgrade && \
 FROM alpine:3.13.5
 MAINTAINER steve@the-steve.com
 RUN apk --update upgrade && \
-    apk add libtool pkgconfig boost-dev libevent-dev db-dev && \
     rm -fr /var/cache/apk/* && \
     mkdir -p /bitcoin/bin && \
     mkdir /bitcoin/data
+# Copy all needed files from builder
 COPY --from=builder /bitcoin/* /bitcoin/bin/
+COPY --from=builder /usr/lib/libevent* /usr/lib/
+COPY --from=builder /usr/lib/libstdc++.so.6* /usr/lib/
+COPY --from=builder /usr/lib/libgcc_s.so* /usr/lib/
+COPY --from=builder /bitcoin-core-src/share/examples/bitcoin.conf /bitcoin/
 COPY entrypoint.sh /bitcoin/bin/
-ENTRYPOINT ["/bin/sh"]
-#ENTRYPOINT ["/bitcoin/bin/entrypoint.sh"]
-#CMD ["startd"]
+
+EXPOSE 8333/tcp 8332/tcp
+ENTRYPOINT ["/bitcoin/bin/entrypoint.sh"]
+CMD ["startd"]

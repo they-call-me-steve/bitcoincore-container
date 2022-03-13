@@ -18,7 +18,12 @@ Bitcoind can either be configured using the OPTS environment variable or by a co
 To drop the default config into the data directory run:
 
 doker run --rm -v /srv/bitcoind:/bitcoin/data bitcoincore-container:v1 makeconf
+
 docker run -n bitcoincore -v /srv/bitcoind/:bitcoin/data bitcoincore-container:v1
 
 To launch bitcoincore-container with options run:
-docker run -n bitcoincore -v /home/bitcoin/data:/bitcoin/data -E OPTS="-prune=100000"
+docker run -n bitcoincore -v /home/bitcoin/data:/bitcoin/data -E OPTS="--prune=100000"
+
+Port 8333 can be shared on a public IP address.
+
+DO NOT SHARE PORT 8332 ON A PUBLIC IP. That could lead to stolen funds if you use the built in wallet with Bitcoin Core

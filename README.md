@@ -13,18 +13,18 @@ docker image build -t bitcoincore-container:v0.1 --build-arg BUILDCORES=16 .
 Bitcoind can either be configured using options or by a configuration file.
 To drop the default config into the data directory run:
 
-NOTE: makeconf will delete any existing bitcoin.conf file. Do not run this twice.
+NOTE: makeconf will delete any existing bitcoin.conf file. DO NOT RUN THIS TWICE!!!
 
 doker run --rm -v /srv/bitcoind:/bitcoin/data bitcoincore-container:v0.1 makeconf
 
 docker run -n bitcoincore -d -v /srv/bitcoin/:bitcoin/data bitcoincore-container:v0.1
 
 To launch bitcoincore-container with options run:
-docker run -n bitcoincore -d -v /srv/bitcoin/:/bitcoin/data bitcoincore-container:v01 bitcoind --prune=100000 
+docker run -n bitcoincore -d -v /srv/bitcoin/:/bitcoin/data bitcoincore-container:v01 bitcoind --prune=100000
 
 To see a list of all available commands run help:
 
-docker run --rm -ti bitcoincore-container:v01 help
+docker run --rm bitcoincore-container:v01 help
 
 Port 8333 can be shared on a public IP address.
 

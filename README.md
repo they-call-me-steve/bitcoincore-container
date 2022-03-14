@@ -13,6 +13,8 @@ docker image build -t bitcoincore-container:v0.1 --build-arg BUILDCORES=16 .
 Bitcoind can either be configured using options or by a configuration file.
 To drop the default config into the data directory run:
 
+NOTE: makeconf will delete any existing bitcoin.conf file. Do not run this twice.
+
 doker run --rm -v /srv/bitcoind:/bitcoin/data bitcoincore-container:v0.1 makeconf
 
 docker run -n bitcoincore -d -v /srv/bitcoin/:bitcoin/data bitcoincore-container:v0.1

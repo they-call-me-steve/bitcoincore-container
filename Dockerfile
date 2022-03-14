@@ -4,8 +4,11 @@ LABEL MAINTAINER "Stephen Hunter" <steve@the-steve.com>
 ARG VERSION=master
 # Default is 4, but change this to whatever works for your system
 ARG BUILDCORES=4
+<<<<<<< HEAD
 COPY makeconf.c /custom_coms/
 COPY help.c /custom_coms/
+=======
+>>>>>>> b39345a3cc76372b6a7995614081bc5301d795a6
 RUN apk --update upgrade && \
     apk add autoconf automake bash bison build-base curl git libtool linux-headers make pkgconf python3 xz && \
     git clone --branch "${VERSION}" --single-branch https://github.com/bitcoin/bitcoin.git /bitcoin && \

@@ -1,38 +1,27 @@
 FROM alpine:3.13.5 as builder
-MAINTAINER steve@the-steve.com
-# Change VERSION any branch in the bitcoin git repo. Defaults to master. Versions older than 23.x may have trouble building or completing tests.
+LABEL MAINTAINER "Stephen Hunter" <steve@the-steve.com>
+# Change VERSION any branch in git repo. Defaults to version 23.x
 ARG VERSION=master
 # Default is 4, but change this to whatever works for your system
 ARG BUILDCORES=4
-# Download all needed packages, clone git repo, compile, run tests to verify success, move binaries to directory for easy copy
-RUN apk --update upgrade && \
-    apk add gcc git make autoconf libtool automake pkgconfig g++ boost-dev libevent-dev db-dev libzmq file && \
-    rm -fr /var/cache/apk/* && \
-    git clone https://github.com/bitcoin/bitcoin /bitcoin-core-src && \
-    cd /bitcoin-core-src && \
-    git checkout ${VERSION} && \
+RUN apk add -U autoconf automake bash bison boost-dev build-base curl db-dev git libevent-dev libtool linux-headers make pkgconf python3 xz && \
+    git clone --branch "${VERSION}" --single-branch https://github.com/bitcoin/bitcoin.git /bitcoin && \
+    cd /bitcoin/ && \
+    make -C depends/ -j "${BUILDCORES}" && \
     ./autogen.sh && \
-    ./configure --with-incompatible-bdb && \
-    make -j ${BUILDCORES} && \
-    make check && \
-    ./test/functional/test_runner.py --extended && \
-    mkdir /bitcoin && cd src && cp bitcoind bitcoin-cli bitcoin-tx bitcoin-util /bitcoin
+    CONFIG_SITE=/bitcoin/depends/x86_64-pc-linux-musl/share/config.site ./configure --without-gui --without-miniupnpc --without-natpmp && \
+    make -j "${BUILDCORES}"
 
 FROM alpine:3.13.5
-MAINTAINER steve@the-steve.com
-RUN apk --update upgrade && \
-    rm -fr /var/cache/apk/* && \
-    mkdir -p /bitcoin/bin && \
-    mkdir /bitcoin/data
-# Copy all needed files from builder
-COPY --from=builder /bitcoin/* /bitcoin/bin/
-COPY --from=builder /bitcoin-core-src/share/examples/bitcoin.conf /bitcoin/
-COPY --from=builder  /usr/lib/libevent* /usr/lib/libstdc++.so.6* /usr/lib/libgcc_s.so* /usr/lib/libdb_cxx-5.3.so* /usr/lib/
+LABEL MAINTAINER "Stephen Hunter" <steve@the-steve.com>
+ENV HOME /bitcoin/data
+EXPOSE 8333/tcp 8332/tcp
+COPY --from=builder /bitcoin/share/examples/bitcoin.conf /bitcoin/
+COPY --from=builder /bitcoin/src/bitcoind /bitcoin/src/bitcoin-cli /bitcoin/src/bitcoin-tx /bitcoin/src/bitcoin-util /bitcoin//bin/
+COPY --from=builder /lib/ld-musl-x86_64.so.1 /usr/lib/libstdc++.so.6 /usr/lib/libgcc_s.so.1 /lib/
 COPY entrypoint.sh /bitcoin/bin/
 RUN adduser -h /bitcoin -D bitcoin && \
     chown -R bitcoin. /bitcoin 
-
-EXPOSE 8333/tcp 8332/tcp
 VOLUME ["/bitcoin/data"]
 ENTRYPOINT ["/bitcoin/bin/entrypoint.sh"]
 CMD ["startd"]

@@ -4,7 +4,6 @@ LABEL MAINTAINER "Stephen Hunter" <steve@the-steve.com>
 ARG VERSION=master
 # Default is 4, but change this to whatever works for your system
 ARG BUILDCORES=4
-<<<<<<< HEAD
 COPY makeconf.c /custom_coms/
 COPY help.c /custom_coms/
 RUN apk --update upgrade && \

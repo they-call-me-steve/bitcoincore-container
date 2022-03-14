@@ -28,4 +28,4 @@ Port 8333 can be shared on a public IP address.
 
 DO NOT SHARE PORT 8332 ON A PUBLIC IP. That could lead to stolen funds if you use the built in wallet with Bitcoin Core
 
-/bitcoin/data is where all configurations and blockchaind data will be stored. For persistence you will to mount this as a volume.
+/bitcoin/data is where all configurations and blockchaind data will be stored. For persistence you will need to mount this as a volume.
